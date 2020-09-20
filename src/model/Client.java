@@ -2,12 +2,13 @@ package model;
 
 public class Client {
 	private IdType idType;
-	private String id,name,phone,adress;
+	private String id,firstName,lastName,phone,adress;
 	
-	public Client (IdType type,String id, String name, String phone, String adress) {
+	public Client (IdType type,String id, String firstName,String lastName, String phone, String adress) {
 		this.idType = type;
 		this.id = id;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.phone = phone;
 		this.adress = adress;
 	}
@@ -28,12 +29,22 @@ public class Client {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	
+
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getPhone() {

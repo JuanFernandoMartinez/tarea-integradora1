@@ -14,6 +14,35 @@ public class Manager {
 		this.products = new LinkedList<>();
 	}
 	
+	
+	// register methods
+	
+	public void registerRestaurants(Restaurant r) {
+		restaurants.add(r);
+	}
+	
+	public void registerProduct(Product p) {
+		products.add(p);
+	}
+	
+	public void registerClient(Client c) {
+		if (clients.isEmpty()) {
+			clients.add(c);
+		}else {
+			int i = 0;
+			while (clients.get(i).getLastName().compareTo(c.getLastName()) == 1) {
+				i++;
+			}
+			clients.add(i, c);
+			
+		}
+	}
+	
+	public void registerOrder(Order o) {
+			orders.add(o);	
+	}
+	
+	
 	public boolean updateRestaurant(String nit, String name, String admin) {
 		for (int i = 0; i < restaurants.size(); i++) {
 			if (restaurants.get(i).getNit().equals(nit)) {
