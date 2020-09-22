@@ -1,18 +1,66 @@
 package model;
 import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 public class Manager {
+	
+	// serial files
+	private final static String RESTAURANTSFILE = "Data/restaurants.king";
+	private final static String CLIENTSFILE = "Data/clients.king";
+	private final static String PRODUCTSFILE = "Data/products.king";
+	private final static String ORDERSFILE = "Data/orders.king";
+	
 	private List<Restaurant> restaurants;
 	private List<Client> clients;
 	private List<Order> orders;
 	private List<Product> products;
 	
 	public Manager() {
+		
 		this.clients = new LinkedList<>();
 		this.restaurants = new LinkedList<>();
 		this.orders = new LinkedList<>();
 		this.products = new LinkedList<>();
 	}
+	
+	
+	public void loadStatus()throws IOException, ClassNotFoundException  {
+		File file = new File(RESTAURANTSFILE);
+		ObjectInputStream ois;
+		if (file.exists()) {
+			ois = new ObjectInputStream(new FileInputStream(file));
+			restaurants = (LinkedList<Restaurant>)ois.readObject();
+			ois.close();
+			
+		}
+		file = new File(PRODUCTSFILE);
+		if (file.exists()) {
+			ois = new ObjectInputStream(new FileInputStream(file));
+			products = (LinkedList<Product>)ois.readObject();
+			ois.close();
+		}
+		file = new File(ORDERSFILE);
+		if (file.exists()) {
+			ois = new ObjectInputStream(new FileInputStream(file));
+			orders = (LinkedList<Order>)ois.readObject();
+			ois.close();
+		}
+		file = new File(CLIENTSFILE);
+		if (file.exists()) {
+			ois = new ObjectInputStream(new FileInputStream(file));
+			clients = (LinkedList<Client>)ois.readObject();
+			ois.close();
+		}
+			
+	}
+	
+	
 	
 	
 	// register methods
@@ -30,7 +78,7 @@ public class Manager {
 			clients.add(c);
 		}else {
 			int i = 0;
-			while (clients.get(i).getLastName().compareTo(c.getLastName()) == 1) {
+			while (clients.get(i).getLastName().compareTo(c.getLastName()) == 1 && clients.get(i).getFirstName().compareTo(c.getFirstName()) == 1) {
 				i++;
 			}
 			clients.add(i, c);
@@ -39,15 +87,16 @@ public class Manager {
 	}
 	
 	public void registerOrder(Order o) {
-			orders.add(o);	
+			orders.add(o);
+		
 	}
 	
 	
 	public boolean updateRestaurant(String nit, String name, String admin) {
-		for (int i = 0; i < restaurants.size(); i++) {
-			if (restaurants.get(i).getNit().equals(nit)) {
-				restaurants.get(i).setAdmin(admin);
-				restaurants.get(i).setName(name);
+		for (Restaurant x:restaurants) {
+			if (x.getNit().equals(nit)) {
+				x.setAdmin(admin);
+				x.setName(name);
 				return true;
 			}
 		}
@@ -55,12 +104,12 @@ public class Manager {
 	}
 	
 	public boolean updateProduct(String code, String name, String info, String nit,double cost) {
-		for (int i = 0; i<products.size(); i++) {
-			if (products.get(i).getCode().equals(code)) {
-				products.get(i).setCost(cost);
-				products.get(i).setInfo(info);
-				products.get(i).setName(name);
-				products.get(i).setNit(nit);
+		for (Product x:products) {
+			if (x.getCode().equals(code)) {
+				x.setCost(cost);
+				x.setInfo(info);
+				x.setName(name);
+				x.setNit(nit);
 				return true;
 			}
 		}
@@ -68,11 +117,56 @@ public class Manager {
 		return false;
 	}
 	
-	public boolean updateClient(IdType type,String id, String name, String phone, String adress) {
-		for (int i = 0; i<clients.size(); i++) {
-			
+	public boolean updateClient(String id, String firstName,String lastName, String phone, String adress, IdType type) {
+		for (Client x:clients) {
+			if (x.getId().equals(id)) {
+				x.setAdress(adress);
+				x.setFirstName(firstName);
+				x.setLastName(lastName);
+				x.setPhone(phone);
+				x.setIdType(type);
+				return true;
+			}
 		}
 		
 		return false;
 	}
+	
+	public boolean updateOrder(String code, String clientCode, String nit) {
+		for (Order x:orders) {
+			if (x.getCode().equals(code)) {
+				x.setClientCode(clientCode);
+				x.setRestaurantNit(nit);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void saveStatus()throws IOException, ClassNotFoundException {
+		File file = new File(RESTAURANTSFILE);
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+		oos.writeObject(restaurants);
+		oos.close();
+		
+		file = new File(PRODUCTSFILE);
+		oos = new ObjectOutputStream(new FileOutputStream(file));
+		oos.writeObject(products);
+		oos.close();
+		
+		file = new File(ORDERSFILE);
+		oos = new ObjectOutputStream(new FileOutputStream(file));
+		oos.writeObject(ORDERSFILE);
+		oos.close();
+		
+		file = new File(CLIENTSFILE);
+		oos = new ObjectOutputStream(new FileOutputStream(file));
+		oos.writeObject(clients);
+		
+		oos.close();
+		
+		
+	}
+	
+	
 }

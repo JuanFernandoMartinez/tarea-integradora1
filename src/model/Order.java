@@ -1,18 +1,27 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Calendar;
 
-public class Order {
+import exceptions.InvalidStatusException;
+
+public class Order implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1;
 	private String code,clientCode,restaurantNit,date;
 	private int hour;
+	private OrderStatus status;
 	
-	public Order ( String clientCode,String restaurantNit,String date, int hour ) {
+	public Order ( String clientCode,String restaurantNit) {
 		this.clientCode = clientCode;
 		this.restaurantNit = restaurantNit;
 		this.date = parseDate();
 		this.hour = generateHour();
 		this.code = generateCode();
+		this.status = OrderStatus.RECUESTED;
 	}
 
 	
@@ -32,8 +41,8 @@ public class Order {
 
 	
 	/**
-	 * gets the actuar hour <br>
-	 * @return int with hour
+	 * gets the actual hour <br>
+	 * @return integer with hour
 	 */
 	private int generateHour() {
 		Calendar calendario = Calendar.getInstance();
@@ -91,10 +100,28 @@ public class Order {
 		return hour;
 	}
 
-	public void setHour(int hour) {
-		this.hour = hour;
+	/**
+	 * set the actual hour to the attribute <br>
+	 */
+	public void setHour() {
+		Calendar calendario = Calendar.getInstance();
+		hour = calendario.get(Calendar.HOUR);
 	}
 	
+
+	/**
+	 * change the Order status <br>
+	 * <b>pre:</b> the integer given by params mus be in range[0,3]<br>
+	 * @param x integer with the value of new status 
+	 * @throws InvalidStatusException if the status value given is less or equals to the actual status 
+	 */
+	public void changeStatus(int x) throws InvalidStatusException {
+		if (this.status.getStatus() < x) {
+			this.status.setStatus(x);
+		}else {
+			throw new InvalidStatusException();
+		}
+	}
 	
 	
 }
