@@ -1,12 +1,20 @@
 package model;
 import java.util.List;
+
+import comparators.OrderComparator;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
 import java.util.LinkedList;
 public class Manager {
 	
@@ -164,9 +172,24 @@ public class Manager {
 		oos.writeObject(clients);
 		
 		oos.close();
+			
+	}
+	
+	public void bigOrder(String filePath) throws IOException {
+		OrderComparator comparator = new OrderComparator();
+		Collections.sort(orders, comparator);
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
+		for (Order o:orders) {
+			String line;
+			line = "Restaurant nit,Client ID,Date,Product Code\n";
+			line+= ""
+			
+		}
 		
 		
 	}
+		
 	
 	
 }
