@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import exceptions.InvalidStatusException;
 
@@ -11,16 +13,18 @@ public class Order implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1;
-	private String code,clientCode,restaurantNit,date;
+	private String code,clientId,restaurantNit,date;
 	private int hour;
 	private OrderStatus status;
+	private List<Product> products;
 	
 	public Order ( String clientCode,String restaurantNit) {
-		this.clientCode = clientCode;
+		this.clientId = clientCode;
 		this.restaurantNit = restaurantNit;
 		this.date = parseDate();
 		this.hour = generateHour();
 		this.code = generateCode();
+		this.products = new LinkedList<Product>();
 		this.status = OrderStatus.RECUESTED;
 	}
 
@@ -72,12 +76,12 @@ public class Order implements Serializable {
 		this.code = code;
 	}
 
-	public String getClientCode() {
-		return clientCode;
+	public String getClientId() {
+		return clientId;
 	}
 
-	public void setClientCode(String clientCode) {
-		this.clientCode = clientCode;
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
 	}
 
 	public String getRestaurantNit() {
@@ -122,6 +126,15 @@ public class Order implements Serializable {
 			throw new InvalidStatusException();
 		}
 	}
+	
+	public void addProduct(Product p) throws InvalidStatusException{
+		products.add(p);
+	}
+	public List<Product> getProducts() {
+		return products;
+	}
+	
+
 
 
 }

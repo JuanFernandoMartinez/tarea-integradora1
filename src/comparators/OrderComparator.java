@@ -13,11 +13,11 @@ public class OrderComparator implements Comparator<Order> {
 		}else if (o1.getRestaurantNit().compareTo(o2.getRestaurantNit())==-1) {
 			return 1;
 		}else if (o1.getRestaurantNit().compareTo(o2.getRestaurantNit())==0) {
-			if (o1.getClientCode().compareTo(o2.getClientCode()) == 1) {
+			if (o1.getClientId().compareTo(o2.getClientId()) == 1) {
 				return 1;
-			}else if (o1.getClientCode().compareTo(o2.getClientCode()) == -1) {
+			}else if (o1.getClientId().compareTo(o2.getClientId()) == -1) {
 				return -1;
-			}else if (o1.getClientCode().compareTo(o2.getClientCode()) == 0) {
+			}else if (o1.getClientId().compareTo(o2.getClientId()) == 0) {
 				if (o1.getDate().compareTo(o2.getDate()) == 1) {
 					return -1;
 				}else if (o1.getDate().compareTo(o2.getDate()) == -1) {
