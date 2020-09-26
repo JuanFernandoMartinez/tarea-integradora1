@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Product implements Serializable {
+public class Product implements Serializable, Comparable <Product> {
 	/**
 	 * 
 	 */
@@ -10,6 +10,14 @@ public class Product implements Serializable {
 	private String code,name,info,nit;
 	private double cost;
 	
+	/**
+	 * creates a new Product object
+	 * @param code String !null !empty
+	 * @param name String !null !empty
+	 * @param info String !null !empty
+	 * @param nit String !null !empty
+	 * @param cost double x ; x> 0 
+	 */
 	public Product(String code, String name, String info, String nit,double cost) {
 		this.code = code;
 		this.info = info;
@@ -56,6 +64,18 @@ public class Product implements Serializable {
 
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	@Override
+	public int compareTo(Product o) {
+		if (name.equals(o.name)) {
+			return 0;
+		}else if (name.compareTo(o.name)==1) {
+			return 1;
+		}else {
+			return -1;
+		}
+		
 	}
 	
 	

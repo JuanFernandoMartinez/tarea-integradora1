@@ -1,7 +1,7 @@
 package model;
 
 public enum IdType {
-	CC("Cedula de ciudadania"),
+	CC("cedula de ciudadania"),
 	TI("Targeta de identidad"),
 	CE("Cedula de Extrageria"),
 	PP("Pasaporte");

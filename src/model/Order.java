@@ -18,6 +18,11 @@ public class Order implements Serializable {
 	private OrderStatus status;
 	private List<Product> products;
 	
+	/**
+	 * creates an Order object 
+	 * @param clientCode String !null !empty
+	 * @param restaurantNit String !null !empty
+	 */
 	public Order ( String clientCode,String restaurantNit) {
 		this.clientId = clientCode;
 		this.restaurantNit = restaurantNit;

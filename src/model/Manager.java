@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 public class Manager {
@@ -23,51 +24,90 @@ public class Manager {
 	private final static String PRODUCTSFILE = "Data/products.king";
 	private final static String ORDERSFILE = "Data/orders.king";
 	
+	// csv Files
+	private final static String RESTAURANTSCSV = "Data/restaurantsCSV.csv";
+	private final static String PRODUCTSCSV = "Data/productssCSV.csv";
+	private final static String CLIENTSCSV = "Data/clientsCSV.csv";
+	private final static String ORDERSCSV = "Data/ordersCSV.csv";
+	
 	private List<Restaurant> restaurants;
 	private List<Client> clients;
 	private List<Order> orders;
 	private List<Product> products;
 	
-	public Manager() {
-		
-		this.clients = new LinkedList<>();
-		this.restaurants = new LinkedList<>();
-		this.orders = new LinkedList<>();
-		this.products = new LinkedList<>();
+	/**
+	 * creates a new Manager Object
+	 */
+	public Manager()throws IOException, ClassNotFoundException {
+		loadStatus();
 	}
 	
-	
+	/**
+	 * load previous program status
+	 * <b>pre:</b> this object must be initialized 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void loadStatus()throws IOException, ClassNotFoundException  {
+		loadClients();
+		loadOrders();
+		loadProducts();
+		loadRestaurants();
+	}
+	
+	public void loadClients() throws IOException, ClassNotFoundException {
+		File file = new File(CLIENTSFILE);
+		if (file.exists()) {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+			clients = (LinkedList)ois.readObject();
+			ois.close();
+		}else {
+			restaurants = new LinkedList<>();
+			products = new LinkedList<>();
+			clients = new LinkedList<>();
+			orders = new LinkedList<>();
+		}
+	}
+	
+	public void loadProducts() throws IOException, ClassNotFoundException {
+		File file = new File(PRODUCTSFILE);
+		if (file.exists()) {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+			products = (LinkedList)ois.readObject();
+			ois.close();
+		}else {
+			products = new LinkedList<Product>();
+		}
+	}
+	
+	public void loadOrders() throws IOException, ClassNotFoundException {
+		File file = new File(ORDERSFILE);
+		if (file.exists()) {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+			orders = (LinkedList)ois.readObject();
+			ois.close();
+		}else {
+			orders = new LinkedList<Order>();
+		}
+	}
+	
+	public void loadRestaurants() throws IOException, ClassNotFoundException {
 		File file = new File(RESTAURANTSFILE);
 		ObjectInputStream ois;
 		if (file.exists()) {
 			ois = new ObjectInputStream(new FileInputStream(file));
-			restaurants = (LinkedList<Restaurant>)ois.readObject();
+			restaurants = (LinkedList<Restaurant>) ois.readObject();
 			ois.close();
 			
+		}else {
+			restaurants = new LinkedList<Restaurant>();
 		}
-		file = new File(PRODUCTSFILE);
-		if (file.exists()) {
-			ois = new ObjectInputStream(new FileInputStream(file));
-			products = (LinkedList<Product>)ois.readObject();
-			ois.close();
-		}
-		file = new File(ORDERSFILE);
-		if (file.exists()) {
-			ois = new ObjectInputStream(new FileInputStream(file));
-			orders = (LinkedList<Order>)ois.readObject();
-			ois.close();
-		}
-		file = new File(CLIENTSFILE);
-		if (file.exists()) {
-			ois = new ObjectInputStream(new FileInputStream(file));
-			clients = (LinkedList<Client>)ois.readObject();
-			ois.close();
-		}
-			
 	}
 	
 	
+	public void orderProducts() {
+		Collections.sort(products);
+	}
 	
 	
 	// register methods
@@ -78,6 +118,7 @@ public class Manager {
 	
 	public void registerProduct(Product p) {
 		products.add(p);
+		orderProducts();
 	}
 	
 	public void registerClient(Client c) {
@@ -163,7 +204,7 @@ public class Manager {
 		
 		file = new File(ORDERSFILE);
 		oos = new ObjectOutputStream(new FileOutputStream(file));
-		oos.writeObject(ORDERSFILE);
+		oos.writeObject(orders);
 		oos.close();
 		
 		file = new File(CLIENTSFILE);
@@ -195,7 +236,7 @@ public class Manager {
 	public String listRestaurants() {
 		for (int i = restaurants.size(); i>0; i--) {
 			for (int j = 0; j<i; j++) {
-				if (restaurants.get(j).getName().compareTo(restaurants.get(j+1).getName()) == 1) {
+				if (restaurants.get(j).compareTo(restaurants.get(j+1))==0) {
 					Restaurant aux = restaurants.get(j);
 					restaurants.set(j, restaurants.get(j+1));
 					restaurants.set(j+1, aux);
@@ -233,18 +274,92 @@ public class Manager {
 	}
 	
 	public Client searchClient(String name) throws ClientNotFoundException{
-		int index = -1;
-		for (int i = 0;i<clients.size(); i++) {
-			if (clients.get(i).getFirstName().equals(name)) {
-				index = i;
+		int min = 0;
+		int max = clients.size()-1;
+		int index = (max+min)/2;
+		boolean found = false;
+		while (min<=max && !found) {
+			if (clients.get(index).getFirstName().equals(name)) {
+				found = true;
+			}else if (clients.get(index).getFirstName().compareTo(name)== 1) {
+				min = index+1;
+				index = (max+min)/2;
+			}else {
+				max = index-1;
+				index = (max+min)/2;
 			}
 		}
-		if (index == -1) {
-			throw new ClientNotFoundException();
-		}else {
-			return clients.get(index);
-		}
+		return clients.get(index);
 		
+	}
+	
+	public void importData(String separator) throws IOException {
+		//import restaurants
+		BufferedReader reader = new BufferedReader(new FileReader(RESTAURANTSCSV));
+		String line = reader.readLine();
+		line = reader.readLine();
+		while (line != null) {
+			String[] prt = line.split(separator);
+			Restaurant restaurant = new Restaurant(prt[0],prt[1],prt[2]);
+			restaurants.add(restaurant);
+			line = reader.readLine();
+		}
+		reader.close();
+		
+		// import products
+		
+		reader = new BufferedReader(new FileReader(PRODUCTSCSV));
+		line = reader.readLine();
+		line = reader.readLine();
+		while (line !=null) {
+			String[] prt = line.split(separator);
+			Product product = new Product(prt[0],prt[1],prt[2],prt[3],Double.parseDouble(prt[4]));
+			products.add(product);
+			
+			line = reader.readLine();
+		}
+		reader.close();
+		
+		// import orders
+		reader = new BufferedReader(new FileReader(ORDERSCSV));
+		line = reader.readLine();
+		line = reader.readLine();
+		
+		while (line != null) {
+			String[] prt = line.split(separator);
+			Order order = new Order(prt[0],prt[1]);
+			orders.add(order);
+			line = reader.readLine();
+		}
+		reader.close();
+		
+		// import clients
+		
+		reader = new BufferedReader(new FileReader(CLIENTSCSV));
+		line = reader.readLine();
+		line = reader.readLine();
+		
+		while (line != null) {
+			String[] prt = line.split(separator);
+			Client client = new Client(createIdType(prt[0]), prt[1], prt[2], prt[3], prt[4], prt[5]);
+			registerClient(client);
+			line = reader.readLine();
+		}
+		reader.close();
+		
+	}
+	
+	private IdType createIdType(String type) {
+		if (type.equalsIgnoreCase("CC")) {
+			return IdType.CC;
+		}else if(type.equalsIgnoreCase("TI")) {
+			return IdType.TI;
+		}else if (type.equalsIgnoreCase("CE")) {
+			return IdType.CE;
+		}else if (type.equalsIgnoreCase("PP")) {
+			return IdType.PP;
+		}
+		return IdType.CC;
 	}
 	
 	
