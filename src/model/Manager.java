@@ -55,6 +55,12 @@ public class Manager {
 		loadRestaurants();
 	}
 	
+	
+	/**
+	 * loads clients list from serial file <br>
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void loadClients() throws IOException, ClassNotFoundException {
 		File file = new File(CLIENTSFILE);
 		if (file.exists()) {
@@ -69,6 +75,11 @@ public class Manager {
 		}
 	}
 	
+	/**
+	 * loads products list form serial file <br>
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void loadProducts() throws IOException, ClassNotFoundException {
 		File file = new File(PRODUCTSFILE);
 		if (file.exists()) {
@@ -80,6 +91,12 @@ public class Manager {
 		}
 	}
 	
+	
+	/**
+	 * loads orders file from serial file <br>
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void loadOrders() throws IOException, ClassNotFoundException {
 		File file = new File(ORDERSFILE);
 		if (file.exists()) {
@@ -91,6 +108,12 @@ public class Manager {
 		}
 	}
 	
+	
+	/**
+	 * loads restaurants list from serial file
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void loadRestaurants() throws IOException, ClassNotFoundException {
 		File file = new File(RESTAURANTSFILE);
 		ObjectInputStream ois;
@@ -110,17 +133,28 @@ public class Manager {
 	}
 	
 	
-	// register methods
 	
+	/**
+	 * register a new restaurant to the restaurants list
+	 * @param r Restaurant object !null
+	 */
 	public void registerRestaurants(Restaurant r) {
 		restaurants.add(r);
 	}
 	
+	/**
+	 * register a new Product to the products list
+	 * @param p Product object !null
+	 */
 	public void registerProduct(Product p) {
 		products.add(p);
 		orderProducts();
 	}
 	
+	/**
+	 * register a new client to the clients list
+	 * @param c Client object !null
+	 */
 	public void registerClient(Client c) {
 		if (clients.isEmpty()) {
 			clients.add(c);
@@ -134,12 +168,23 @@ public class Manager {
 		}
 	}
 	
+	/**
+	 * register a new order to the orders list
+	 * @param o a Ordero object !null
+	 */
 	public void registerOrder(Order o) {
 			orders.add(o);
 		
 	}
 	
 	
+	/**
+	 * update a restaurant given the nit 
+	 * @param nit String !null
+	 * @param name String !null
+	 * @param admin String !null
+	 * @return true if the operation was successful false in other case 
+	 */
 	public boolean updateRestaurant(String nit, String name, String admin) {
 		for (Restaurant x:restaurants) {
 			if (x.getNit().equals(nit)) {
@@ -151,6 +196,15 @@ public class Manager {
 		return false;
 	}
 	
+	/**
+	 * update product given a code
+	 * @param code String !null
+	 * @param name String !null
+	 * @param info String !null
+	 * @param nit String !null
+	 * @param cost double > 0
+	 * @return true if the operation was successful false in other case 
+	 */
 	public boolean updateProduct(String code, String name, String info, String nit,double cost) {
 		for (Product x:products) {
 			if (x.getCode().equals(code)) {
@@ -165,6 +219,17 @@ public class Manager {
 		return false;
 	}
 	
+	
+	/**
+	 * update client object given an id
+	 * @param id String !null
+	 * @param firstName String !null
+	 * @param lastName String !null
+	 * @param phone String !null
+	 * @param adress String !null
+	 * @param type IdType
+	 * @return true if the operation was successful false in other case 
+	 */
 	public boolean updateClient(String id, String firstName,String lastName, String phone, String adress, IdType type) {
 		for (Client x:clients) {
 			if (x.getId().equals(id)) {
@@ -180,6 +245,14 @@ public class Manager {
 		return false;
 	}
 	
+	
+	/**
+	 * update Order object
+	 * @param code String !null
+	 * @param clientCode String !null
+	 * @param nit String !null
+	 * @return true if the operation was successful false in other case 
+	 */
 	public boolean updateOrder(String code, String clientCode, String nit) {
 		for (Order x:orders) {
 			if (x.getCode().equals(code)) {
@@ -191,6 +264,11 @@ public class Manager {
 		return false;
 	}
 	
+	/**
+	 * save status application to serial files
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void saveStatus()throws IOException, ClassNotFoundException {
 		File file = new File(RESTAURANTSFILE);
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -215,6 +293,12 @@ public class Manager {
 			
 	}
 	
+	/**
+	 * export orders list info to csv file separated by String given
+	 * @param filePath
+	 * @param separator
+	 * @throws IOException
+	 */
 	public void exportOrders(String filePath,String separator) throws IOException {
 		OrderComparator comparator = new OrderComparator();
 		Collections.sort(orders, comparator);
@@ -233,6 +317,10 @@ public class Manager {
 		
 	}
 	
+	/**
+	 * gets the String with restaurants list names
+	 * @return String !null
+	 */
 	public String listRestaurants() {
 		for (int i = restaurants.size(); i>0; i--) {
 			for (int j = 0; j<i; j++) {
@@ -251,6 +339,10 @@ public class Manager {
 		return list;
 	}
 	
+	/**
+	 * gets the clients list names in a String variable
+	 * @return String !null
+	 */
 	public String listClients() {
 		LinkedList<Client> clientsAux = (LinkedList<Client>)clients;
 		for (int i = 0; i<clientsAux.size(); i++) {
@@ -273,6 +365,12 @@ public class Manager {
 		return clientsString;
 	}
 	
+	/**
+	 * search client given a firstName
+	 * @param name String !null
+	 * @return if the client is found return Client !null in other case return null
+	 * @throws ClientNotFoundException
+	 */
 	public Client searchClient(String name) throws ClientNotFoundException{
 		int min = 0;
 		int max = clients.size()-1;
@@ -289,10 +387,20 @@ public class Manager {
 				index = (max+min)/2;
 			}
 		}
-		return clients.get(index);
+		if (found) {
+			return clients.get(index);
+		}else {
+			return null;
+		}
+		
 		
 	}
 	
+	/**
+	 * import data from csv files 
+	 * @param separator
+	 * @throws IOException
+	 */
 	public void importData(String separator) throws IOException {
 		//import restaurants
 		BufferedReader reader = new BufferedReader(new FileReader(RESTAURANTSCSV));
@@ -349,6 +457,11 @@ public class Manager {
 		
 	}
 	
+	/**
+	 * parse String to idType
+	 * @param type String !null
+	 * @return IdType !null 
+	 */
 	private IdType createIdType(String type) {
 		if (type.equalsIgnoreCase("CC")) {
 			return IdType.CC;

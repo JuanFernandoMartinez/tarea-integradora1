@@ -11,6 +11,11 @@ import model.Order;
 import model.Product;
 import model.Restaurant;
 
+/**
+ * creates the Menu class
+ * @author Juan Fernando
+ *
+ */
 public class Menu {
 	static Scanner sc = new Scanner(System.in); 
 	private Manager manager;
@@ -25,6 +30,9 @@ public class Menu {
 		
 	}
 	
+	/**
+	 * stars menu flow
+	 */
 	public void menu() {
 		boolean onUse = true;
 		while (onUse) {
@@ -35,6 +43,10 @@ public class Menu {
 		
 	}
 	
+	/**
+	 * gets String with options
+	 * @return String with menu options
+	 */
 	private String viewMenuOptions() {
 		String options;
 		options = "======================\n";
@@ -49,6 +61,10 @@ public class Menu {
 		return options;
 	}
 	
+	/**
+	 * manage the main menu flow
+	 * @return true if the flow must continue and false if the flow must finish
+	 */
 	private boolean manageMenuChoice() {
 		int choice;
 		do {
@@ -77,6 +93,10 @@ public class Menu {
 		return true;
 	}
 
+	
+	/**
+	 * import and import and export data
+	 */
 	private void manageData() {
 		System.out.println("1. exportar datos de ordenes  2. importar datos");
 		int choice = Integer.parseInt(sc.nextLine());
@@ -107,6 +127,9 @@ public class Menu {
 		
 	}
 
+	/**
+	 * search client given the first Name
+	 */
 	private void searchClient() {
 		System.out.println("Escriba el nombre del cliente que desea buscar");
 		String name = sc.nextLine();
@@ -123,6 +146,9 @@ public class Menu {
 		
 	}
 
+	/**
+	 * list restaurants and clients 
+	 */
 	private void lists() {
 		System.out.println("1. lista de clientes  2. lista de restaurantes");
 		int choice = Integer.parseInt(sc.nextLine());
@@ -134,6 +160,9 @@ public class Menu {
 		
 	}
 
+	/**
+	 * manage update data flow 
+	 */
 	private void updateData() {
 		int choice = updatingMenu();
 		switch (choice) {
@@ -146,6 +175,10 @@ public class Menu {
 		
 	}
 	
+	/**
+	 * manage the updating choices 
+	 * @return Integer between 1 and 5
+	 */
 	private int updatingMenu() {
 		String options;
 		options = "=====================================\n";
@@ -160,6 +193,9 @@ public class Menu {
 		return choice;
 	}
 	
+	/**
+	 * update restaurant object from manager restaurants list
+	 */
 	private void updateRestaurant() {
 		System.out.println("Escriba el nit del restaurante a actualizar");
 		String nit = sc.nextLine();
@@ -170,6 +206,9 @@ public class Menu {
 		manager.updateRestaurant(nit, name, admin);
 	}
 	
+	/**
+	 * update product object form manager products list
+	 */
 	private void updateProduct() {
 		System.out.println("Escriba el codigo del producto a modificar");
 		String code = sc.nextLine();
@@ -184,6 +223,9 @@ public class Menu {
 		manager.updateProduct(code, name, info, nit, cost);
 	}
 	
+	/**
+	 * update client object from manager clients list
+	 */
 	private void updateClient() {
 		System.out.println("Escriba el numero de identificaion del cliente que desea actualizar");
 		String id = sc.nextLine();
@@ -203,6 +245,9 @@ public class Menu {
 		}
 	}
 	
+	/**
+	 * update order object from manager orders list
+	 */
 	private void updateOrder() {
 		System.out.println("Escriba el codigo de la orden que desea actualizar");
 		String code = sc.nextLine();
@@ -217,6 +262,9 @@ public class Menu {
 		}
 	}
 
+	/**
+	 * manage the register options flow
+	 */
 	private void registeData() {
 		System.out.println(registerDataMenu());
 		int choice = Integer.parseInt(sc.nextLine());
@@ -237,6 +285,10 @@ public class Menu {
 		
 	}
 	
+	/**
+	 * creates a restaurant object with user specifications 
+	 * @return Restaurant !null
+	 */
 	private Restaurant createRestaurant() {
 		System.out.println("Escriba el nombre del restaurante");
 		String name = sc.nextLine();
@@ -248,6 +300,10 @@ public class Menu {
 		return restaurant;
 	}
 	
+	/**
+	 * creates a client object with user specifacations
+	 * @return Client !null
+	 */
 	public Client createClient() {
 		
 		System.out.println("Escriba el numero de identidad");
@@ -264,6 +320,10 @@ public class Menu {
 		return client;
 	}
 	
+	/**
+	 * parse String given by user to IdType
+	 * @return IdType !null
+	 */
 	private IdType createIdType() {
 			System.out.println("Escriba el tipo de documento: TI || CC || CE || PP , recuerde usar mayusculas");
 			String choice = sc.nextLine();
@@ -277,6 +337,10 @@ public class Menu {
 			return IdType.CC;
 		}
 		
+	/**
+	 * creates a product object with user specifications 
+	 * @return Products !null
+	 */
 	private Product createProduct() {
 		System.out.println("Escriba el codigo del producto");
 		String code = sc.nextLine();
@@ -293,6 +357,10 @@ public class Menu {
 		return product;
 	}
 	
+	/**
+	 * creates Order object with user specifications
+	 * @return Order !null
+	 */
 	private Order createOrder() {
 		
 		System.out.println("Escriba el codigo del cliente");
@@ -304,7 +372,10 @@ public class Menu {
 		return order;
 	}
 	
-	
+	/**
+	 * gets the options of the register menu
+	 * @return String with options
+	 */
 	private String registerDataMenu() {
 		String options;
 		options = "====================\n";
