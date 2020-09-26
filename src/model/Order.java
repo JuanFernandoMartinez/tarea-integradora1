@@ -39,12 +39,13 @@ public class Order implements Serializable {
 	 * <b>post:</b> returns a code with date,hour, restaurantNit,minutes,seconds and milliseconds <br>
 	 * @return String with order code; 
 	 */
-	private String generateCode() {
+	public String generateCode() {
 		String auxDate = date;
 		auxDate.replace(" / ", "");
 		Calendar calendar = Calendar.getInstance();
 		String extraInfo = calendar.get(Calendar.MINUTE)+""+calendar.get(Calendar.SECOND)+calendar.get(Calendar.MILLISECOND);
 		String cd = auxDate+hour+restaurantNit+extraInfo;
+		this.code = cd;
 		return cd;
 	}
 
@@ -63,13 +64,14 @@ public class Order implements Serializable {
 	 * gets String with date
 	 * @return String with date (year,month and day of month
 	 */
-	private String parseDate() {
+	public String parseDate() {
 		String strDate = "";
 		int month = LocalDate.now().getMonthValue();
 		int year = LocalDate.now().getYear();
 		int day = LocalDate.now().getDayOfMonth();
 		
 		strDate = year+" / "+month+" / "+day;
+		this.date = strDate;
 		return strDate;
 	}
 
